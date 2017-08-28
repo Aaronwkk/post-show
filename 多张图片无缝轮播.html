@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>无缝轮播图</title>
+ <style>
+  *{margin: 0;padding:0; }
+  ul{list-style: none;}
+  .banner{width: 1000px;height: 145px;border: 2px solid #ccc;margin: 100px auto;position: relative;overflow: hidden;}
+  .img{position: absolute;top: 0;left: 0}
+  .img li{float: left;margin:20px 0 0 20px }
+  /*.btn{display: none;}*/
+  .btn span{display: none;width: 30px;height: 60px;background: rgba(0,0,0,0.4);color: #fff;font-size: 30px;line-height: 60px;text-align: center;cursor:pointer;}
+  .btn .prev{position: absolute;left: 0;top: 50%;margin-top: -30px;}
+  .btn .next{position: absolute;right: 0;top: 50%;margin-top: -30px;}
+  .num .active{background-color: #fff;}
+ </style>
+ <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="banner">
+ <ul class="img">
+  <li><a href="#"><img src="img/1.jpg" alt="第1张图片"></a></li>
+  <li><a href="#"><img src="img/2.jpg" alt="第2张图片"></a></li>
+  <li><a href="#"><img src="img/3.jpg" alt="第3张图片"></a></li>
+  <li><a href="#"><img src="img/4.jpg" alt="第4张图片"></a></li>
+  <li><a href="#"><img src="img/5.jpg" alt="第5张图片"></a></li>
+  <li><a href="#"><img src="img/1.jpg" alt="第1张图片"></a></li>
+  <li><a href="#"><img src="img/2.jpg" alt="第2张图片"></a></li>
+  <li><a href="#"><img src="img/3.jpg" alt="第3张图片"></a></li>
+  <li><a href="#"><img src="img/4.jpg" alt="第4张图片"></a></li>
+  <li><a href="#"><img src="img/5.jpg" alt="第5张图片"></a></li>
+ </ul>
+ <div class="btn">
+  <span class="prev"><</span>
+  <span class="next">></span>
+ </div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+   var a = 4; 
+	// 显示几张图片
+    var i = 0;
+    var timer=null;
+    var b=2000;
+		var firstimg=$('.img li').clone();
+		var $iwidth=$('.img li').first().width();
+		// 图片的大小
+		$(".img").append(firstimg);
+    	var $len=$('.img li').length;
+		var $width=$len*($('.img img').width()+20);
+		$('.img').width($width);
+
+		$('.banner').width(a*($iwidth+20)+20);
+
+		// 点击下一张
+		$('.next').click(function(){
+      		i++;
+
+		      if (i==$len-a) {
+	          	i=1;
+	          	$('.img').css({left:0});
+		      }
+				$('.img').stop().animate({left:-i*($iwidth+20)});
+		})
+
+    // 点击上一张图片
+      $('.prev').click(function(){
+        i--;
+
+        if (i==-1) {
+          i=$len-a-2;
+          $('.img').css({left:-$width+5*($iwidth+20)});
+        }
+      $('.img').stop().animate({left:-i*($iwidth+20)});
+
+    })
+
+      // 开一个定时器
+      timer=setInterval(function(){
+      	i++;
+      	if (i==$len-a+1) {
+      		i=0;
+          	$('.img').animate({left:0},500);
+          };
+          $('.img').stop().animate({left:-i*($iwidth+20)});
+
+      },b);
+
+      // 鼠标移入时显示与隐藏按钮
+      $('.banner').hover(function(){
+        $('.btn span').show()},function(){
+          $('.btn span').hide();
+      })
+
+      // 鼠标移入时停止动画
+      
+      $('.banner').hover(function(){
+      	clearInterval(timer);
+      },function(){
+  	       timer=setInterval(function(){
+      	 i++;
+      	if (i==$len-a+1) {
+      		i=0;
+          	$('.img').animate({left:0},500);
+          };
+          $('.img').stop().animate({left:-i*($iwidth+20)});
+      	},b);
+      })
+
+
+	})
+</script>
+</body>
